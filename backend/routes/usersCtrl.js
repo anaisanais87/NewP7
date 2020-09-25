@@ -77,7 +77,7 @@ module.exports = {
         var password = req.body.password;
 
         if (email == null || password == null) {
-            return res.status(400).json({ 'error': 'missing parameters'});
+            return res.status(400).json({ 'error': 'missing parameters!'});
         }
 
         //Verify mail regex and password length
