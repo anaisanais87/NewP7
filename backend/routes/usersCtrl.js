@@ -172,56 +172,80 @@ module.exports = {
     // }
 
 
-    // updateUserProfile: function (req, res) {
-    //     //Getting auth header
-    //     var headerAuth = req.headers['authorization'];
-    //     var userId = jwtUtils.getUserId(headerAuth);
 
-    //     //Params
-    //     var bio = req.body.bio;
-
-    //     models.User.findOne({
-    //         attributes: ['id', 'bio'],
-    //         where: { id: userId }
-    //     })
-    //         .then(function (userFound) {
-    //             if (!userFound) {
-    //                 return res.status(401).json({ error: 'User not found !' });
-    //             } else {
-    //                 userFound.update({
-    //                     bio: (bio ? bio : userFound.bio)
-    //                 })
-    //                     .then(function (userFound) {
-    //                         return res.status(200).json('User updated');
-    //                     })
-    //                     .catch(function (err) {
-    //                         res.status(500).json({ 'error': 'cannot fetch user' });
-    //                     })
-    //             }
-    //         });
-    //     }
-    // };
         models.User.findOne({
             attributes: ['id', 'bio'],
             where: { id: userId }
         })
+            .then(function (user) {
+                if (user) {
+                    user.update({
+                        bio: (bio ? bio : user.bio)
+                    })
+                        .then(function (user) {
+                            return res.status(201).json({ user })
+                        })
+
+                        .catch(function (err) {
+                            return res.status(500).json({ 'error': 'cannot change bio' });
+                        })
+
+                } else {
+                    return res.status(409).json({ 'error': 'user not found' });
+                }
+
+            })
+            .catch(function (err) {
+                return res.status(500).json({ 'error': 'unable to verify user' });
+            }
+
+            );
+    },
+
+    deleteUserProfile: function (req, res) {
+         // Getting auth header
+         var headerAuth  = req.headers['authorization'];
+         var userId      = jwtUtils.getUserId(headerAuth);
+         
+        //Params
+        var email = req.body.email;
+        var password = req.body.password;
+
+        if (email == null || password == null) {
+            return res.status(400).json({ 'error': 'missing parameters !' });
+        }
+
+        //Verify mail regex and password length
+        models.User.findOne({
+            where: { email: email }
+        })
             .then(function (userFound) {
                 if (userFound) {
-                    userFound.update({
-                        bio: (bio ? bio : userFound.bio)
+
+                    bcrypt.compare(password, userFound.password, function (errBcrypt, resBcrypt) {
+                        if (resBcrypt) {
+                            userFound.delete({
+                                email: email,
+                                password: bcryptedPassword
+                            })
+
+                            .then(function (userFound) {
+                                return res.status(201).json({ userFound });
+                            })
+
+                        } else {
+                            return res.status(403).json({ 'error': 'invalid password' });
+                        }
                     })
-                    res.status(200).json('User updated');
                 } else {
-
-                    res.status(401).json({ 'error': 'User not update !' });
+                    return res.status(404).json({ 'error': 'user not exist in DB' });
                 }
-            })
 
+            })
             .catch(function (err) {
-                res.status(500).json({ 'error': 'user not found' });
-            })
-    }
-
+                return res.status(500).json({ 'error': 'unable to verify user' })
+            });
+    },
 };
 
 
