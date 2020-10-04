@@ -1,28 +1,35 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <router-view></router-view>
+    <!-- <homePage></homePage> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+// import HomePage from './components/HomePage.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
+  // components: {
+  //   'homePage': HomePage
+  // }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+
+@font-face {
+  font-family: "nevis";
+  src: url("./fonts/nevis-Bold.eot");
+  src: url("./fonts/nevis-Bold.eot?#iefix") format("embedded-opentype"), url("./fonts/nevis-Bold.woff2") format("woff2"), url("./fonts/nevis-Bold.woff") format("woff"), url("./fonts/nevis-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
+
+html body {
+  margin: 0;
+  padding: 0;
+}
+
 </style>

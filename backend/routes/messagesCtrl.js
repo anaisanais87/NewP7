@@ -1,7 +1,8 @@
 // Imports
-const models = require('../models');
+const models   = require('../models');
 const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
+const multer = require('../middleware/multer-config');
 
 // Constants
 const TITLE_LIMIT = 2;
@@ -16,8 +17,9 @@ module.exports = {
     var userId = jwtUtils.getUserId(headerAuth);
 
     // Params
-    var title = req.body.title;
-    var content = req.body.content;
+    var title      = req.body.title;
+    var content    = req.body.content;
+    var attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
 
     if (title == null || content == null) {
       return res.status(400).json({ 'error': 'missing parameters ! ' });
@@ -27,74 +29,78 @@ module.exports = {
       return res.status(400).json({ 'error': 'invalid parameters' });
     }
 
-    // models.User.findOne({
-    //   where: { id: userId }
-    // })
-    //   .then(function (userFound) {
-    //     if (userFound) {
-    //       const newMessage = models.Message.create({
-    //         title: title,
-    //         content: content,
-    //         likes: 0,
-    //         UserId: userFound.id
-    //       })
-
-    //         .then(function (newMessage) {
-    //           return res.status(201).json({ 'userId': newMessage.id })
-    //         })
-
-    //         .catch(function (err) {
-    //           return res.status(500).json({ 'error': 'cannot post message' });
-    //         })
-
-    //     } else {
-    //       return res.status(409).json({ 'error': 'user not found' });
-    //     }
-
-    //   })
-    //     .catch(function (err) {
-    //       return res.status(500).json({ 'error': 'unable to verify user' });
-    //     }
-
-    //   );
-    // },
-
-
-    asyncLib.waterfall([
-      function (done) {
-        models.User.findOne({
-          where: { id: userId }
-        })
-          .then(function (userFound) {
-            done(null, userFound);
-          })
-          .catch(function (err) {
-            return res.status(500).json({ 'error': 'unable to verify user' });
-          });
-      },
-      function (userFound, done) {
-        if (userFound) {
-          models.Message.create({
+    models.User.findOne({
+      attributes: ['id'],
+      where: { 
+        id: userId,
+      }
+    })
+      .then(function (user) {
+        if (user) {
+          const newMessage = models.Message.create({
             title: title,
             content: content,
             likes: 0,
-            UserId: userFound.id
+            attachment: attachment,
+            UserId: user.id
           })
             .then(function (newMessage) {
-              done(newMessage);
-            });
+              return res.status(201).json({ newMessage })
+            })
+
+            .catch(function (err) {
+              return res.status(500).json({ 'error': 'cannot post message!!' });
+            })
+
         } else {
-          res.status(404).json({ 'error': 'user not found' });
+          return res.status(409).json({ 'error': 'user not found' });
         }
-      },
-    ], function (newMessage) {
-      if (newMessage) {
-        return res.status(201).json(newMessage);
-      } else {
-        return res.status(500).json({ 'error': 'cannot post message' });
-      }
-    });
-  },
+
+      })
+        .catch(function (err) {
+          return res.status(500).json({ 'error': 'unable to verify user' });
+        }
+
+      );
+    },
+
+
+  //   asyncLib.waterfall([
+  //     function(done) {
+  //       models.User.findOne({
+  //         where: { id: userId }
+  //       })
+  //       .then(function(userFound) {
+  //         done(null, userFound);
+  //       })
+  //       .catch(function(err) {
+  //         return res.status(500).json({ 'error': 'unable to verify user' });
+  //       });
+  //     },
+  //     function(userFound, done) {
+  //       if(userFound) {
+  //         models.Message.create({
+  //           title  : title,
+  //           content: content,
+  //           likes  : 0,
+  //           UserId : userFound.id
+  //         })
+  //         .then(function(newMessage) {
+  //           done(newMessage);
+  //         });
+  //       } else {
+  //         res.status(404).json({ 'error': 'user not found' });
+  //       }
+  //     },
+  //   ], function(newMessage) {
+  //     if (newMessage) {
+  //       return res.status(201).json(newMessage);
+  //     } else {
+  //       return res.status(500).json({ 'error': 'cannot post message' });
+  //     }
+  //   });
+  // },
+
   listMessages: function (req, res) {
     var fields = req.query.fields;
     var limit = parseInt(req.query.limit);
