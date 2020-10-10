@@ -1,23 +1,11 @@
 <template>
-  <div class="actu">
-    <div class="head-actu">
-      <img
-        src="../assets/icon-left-font-monochrome-black.svg"
-        alt="Logo Groupomania"
-        width="200"
-        class="logo-groupomania"
-      />
-      <router-link to="/UpdateProfile">
-        <p class="hello-user">Mon Compte</p>
-      </router-link>
-      <!-- <p class="hello-user">NameUser</p> -->
 
-      <!-- <img src="../assets/user_icon.svg" alt="logo user" class="logo-user" /> -->
-    </div>
+  <div class="actu">
+    <headerPage></headerPage>
 
     <div class="wall">
       <h1>
-        Bonjour Username ! <br />
+        Bonjour {{ username }} ! <br />
         Partager et échanger avec vos collègues !
       </h1>
 
@@ -40,7 +28,7 @@
           <div class="inputPost">
             <input
               type="text"
-              id="createPost"
+              id="titlePost"
               class="titlePost"
               v-bind:value="title"
               v-on:input="title = $event.target.value"
@@ -48,15 +36,13 @@
             />
             <input
               type="text"
-              id="createPost"
+              id="contentPost"
               class="contentPost"
               v-bind:value="content"
               v-on:input="content = $event.target.value"
               placeholder="Rédiger un post"
             />
           </div>
-
-          <!-- <p  v-bind:value="content" v-on:input="content = $event.target.value" @>&nbsp;Rédiger un post</p> -->
         </div>
 
         <div class="post">
@@ -74,24 +60,32 @@
       <div class="news">
         <p class="news-title">&nbsp;Fil d'actualité</p>
 
-        <p class="new-post">Publication des autres utilisateurs</p>
+        <p
+          class="new-post"
+          v-bind:value="postUsers"
+          v-on:input="postUsers = $event.target.value"
+        >
+          Publication des autres utilisateurs {{ postUsers }}
+        </p>
 
         <div class="react-news">
           <img src="../assets/like_blue.png" width="30px" height="30px" />
-          <p>&nbsp;J'aime</p>
+          <p @click="addLike">&nbsp;J'aime</p>
 
           <img src="../assets/bubble_blue.png" width="35px" height="35px" />
-          <p>&nbsp;Commenter</p>
+          <p @click="comment">&nbsp;Commenter</p>
         </div>
       </div>
     </div>
 
     <footerPage></footerPage>
   </div>
+
 </template>
 
 <script>
 import axios from "axios";
+import HeaderPage from "./HeaderPage";
 import FooterPage from "./FooterPage";
 
 export default {
@@ -99,29 +93,32 @@ export default {
 
   data() {
     return {
+      username: this.$store.username,
+      // username: this.$route.username,
       urlData: null,
       title: "",
       content: "",
-      attachment: ""
+      attachment: "",
+      postUser: this.$route.listMessages,
     };
   },
 
   components: {
+    headerPage: HeaderPage,
     footerPage: FooterPage,
   },
 
   methods: {
-
-    addFile: function(attachment) {
-      axios.post("http://localhost:3000/api/messages/new/", {
-         attachment: attachment
+    addFile: function (attachment) {
+      axios
+        .post("http://localhost:3000/api/messages/new/", {
+          attachment: attachment,
         })
         .then((response) => {
           console.log(response);
           this.urlData = response.json;
         });
     },
-   
 
     publish: function (title, content) {
       axios
@@ -134,50 +131,28 @@ export default {
           this.urlData = response.json;
         });
     },
+
+    addLike: function (messageId) {
+      axios
+        .post("http://localhost:3000/api/messages/:messageId/vote/like", {
+          messageId: messageId,
+        })
+        .then((response) => {
+          console.log(response);
+          this.urlData = response.json;
+        });
+    },
   },
 };
 </script>
 
 <style>
-.head-actu {
-  background-color: rgba(25, 42, 72, 0.85);
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  padding: 3% 3% 1% 3%;
-}
-
-.hello-user {
-  font-family: sans-serif;
-  font-size: 20px;
-  margin-top: 10%;
-  margin-bottom: 0;
-  color: #aeaeb0;
-  cursor: pointer;
-}
-
-.logo-groupomania {
-  margin-left: 2%;
-  margin-top: -1%;
-  /* margin-top: 2%; */
-}
-
-.logo-user {
-  float: right;
-  margin-right: 2%;
-  margin-top: 1%;
-  width: 25px;
-  height: 30px;
-  cursor: pointer;
-}
-
 .wall {
-  height: 800px;
+  height: auto;
 }
 
 .wall h1 {
-  font-family: sans-serif;
-  font-size: 26px;
+  font-size: 22px;
   padding-top: 6%;
   margin-bottom: 4%;
   color: rgba(25, 42, 72, 0.85);
@@ -190,7 +165,7 @@ export default {
   margin: auto;
   display: block;
   margin-top: 5%;
-  font-size: 18px;
+  font-size: 16px;
   background-color: #eeeeee;
   color: #aeaeb0;
   font-style: italic;
@@ -201,11 +176,10 @@ export default {
   border: none;
   cursor: pointer;
   color: rgba(25, 42, 72, 0.85);
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  margin-left: 32%;
+  margin-left: 26%;
   margin-top: 1.5%;
-  text-decoration: underline;
 }
 
 .btn-publish:hover {
@@ -231,7 +205,6 @@ export default {
 }
 
 .post {
-  font-family: "nevis";
   display: flex;
   justify-content: space-around;
   border: solid 0.2px;
@@ -249,6 +222,11 @@ export default {
   margin-right: -9%;
 }
 
+.post img:hover {
+  transform: scale(1.15);
+  transition-duration: 400ms;
+}
+
 .inputPost {
   display: flex;
   flex-direction: column;
@@ -256,7 +234,7 @@ export default {
 
 .titlePost {
   height: 25px;
-  font-size: 18px;
+  font-size: 16px;
   border: none;
   font-style: italic;
   text-decoration: underline;
@@ -264,9 +242,13 @@ export default {
 
 .contentPost {
   height: 60px;
-  font-size: 18px;
+  font-size: 16px;
   border: none;
   font-style: italic;
+}
+
+.news {
+  margin-bottom: 5%;
 }
 
 .news-title {
@@ -276,7 +258,7 @@ export default {
   margin: auto;
   display: block;
   margin-top: 5%;
-  font-size: 18px;
+  font-size: 16px;
   background-color: #eeeeee;
   color: #aeaeb0;
   font-style: italic;
@@ -291,7 +273,7 @@ export default {
   height: 300px;
   margin: auto;
   margin-top: 0;
-  font-size: 18px;
+  font-size: 16px;
   color: #aeaeb0;
   font-style: italic;
   padding: 0.5rem 0.5rem 0.4rem 0.5rem;
@@ -313,5 +295,11 @@ export default {
 }
 .react-news img {
   margin-right: -18%;
+  cursor: pointer;
+}
+
+.react-news img:hover {
+  transform: scale(1.15);
+  transition-duration: 400ms;
 }
 </style>

@@ -1,100 +1,46 @@
 <template>
   <div class="home">
-    <div class="homePage" v-if="home">
-      <div class="menu-header">
-        <img src="../assets/icon-left-font-monochrome-black.svg" width="200"/>
 
-        <div class="menu-nav">
-          <nav>
-            <ul>
-              <li class="register" @click="formRegister">S'inscrire</li>
+      <headerPage></headerPage>
 
-              <li class="auth" @click="formLogin">S'identifier</li>
-            </ul>
-          </nav>
-        </div>
+    <div class="description">
+
+      <h1>Bienvenue sur votre communauté Groupomania</h1>
+      <img src="../assets/groupe1.jpg" class="groupe-photo" />
+
+      <div class="cart-description">
+        <router-link to="/RegisterUSer">
+          <button class="accessActu">
+            <p>Partager et d'échanger avec tous vos collaborateurs !</p>
+            <img src="../assets/fleche1.svg" />
+          </button>
+        </router-link>
       </div>
-      <div class="description">
-        <div class="cart-description">
-          <h1>Bienvenue sur votre communauté Groupomania</h1>
 
-          <router-link to="/WallActu">
-            <button class="accessActu">Accéder au fil d'actualité</button>
-          </router-link>
-
-        </div>
-      </div>
-      <!-- 
-
-    <div v-if="newsFeed">
-      <wallActu></wallActu>
-    </div> -->
-
-      <div class="footer">
-        <footerPage></footerPage>
-      </div>
     </div>
 
-    <div v-if="formRegisterUser">
-      <registerUser></registerUser>
-    </div>
+    <footerPage></footerPage>
 
-    <div v-if="formAuth">
-      <loginUser></loginUser>
-    </div>
   </div>
 </template>
 
 
 <script>
-// import WallActu from "./WallActu";
+import HeaderPage from "./HeaderPage";
 import FooterPage from "./FooterPage";
-import LoginUser from "./LoginUser";
-import RegisterUser from './RegisterUser'
 
 export default {
   name: "HomePage",
 
-  data() {
-    return {
-      formAuth: false,
-      home: true,
-      formRegisterUser: false
-      // newsFeed: false
-    };
-  },
-
   components: {
-    // 'wallActu': WallActu,
-    'footerPage': FooterPage,
-    'loginUser': LoginUser,
-    'registerUser': RegisterUser
-
-  },
-
-  methods: {
-    formLogin: function () {
-      this.formAuth = true;
-      this.home = false;
-    },
-
-    formRegister: function() {
-      this.formRegisterUser = true;
-      this.home = false;
-    }
-
-    // wallNews: function () {
-    //   // if (userFound)
-    //   this.home = false;
-    //   this.newsFeed = true;
-    // },
+    headerPage: HeaderPage,
+    footerPage: FooterPage,
   },
 };
 </script>
 
 
 <style>
-
 /*Section*/
 
 @font-face {
@@ -109,106 +55,134 @@ export default {
   font-display: swap;
 }
 
-a {
-  text-decoration: none;
-  color: #ff8a80;
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Bold.eot");
+  src: url("../fonts/Montserrat-Bold.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Montserrat-Bold.woff2") format("woff2"),
+    url("../fonts/Montserrat-Bold.woff") format("woff"),
+    url("../fonts/Montserrat-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
 }
 
-li {
-  font-size: 22px;
-  font-family: "nevis";
-  color: #ff8a80;
-  list-style: none;
-  padding: 10px 15px 10px 10px;
-  margin-bottom: 1%;
-  margin-top: 0;
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-ExtraBold.eot");
+  src: url("../fonts/Montserrat-ExtraBold.eot?#iefix")
+      format("embedded-opentype"),
+    url("../fonts/Montserrat-ExtraBold.woff2") format("woff2"),
+    url("../fonts/Montserrat-ExtraBold.woff") format("woff"),
+    url("../fonts/Montserrat-ExtraBold.ttf") format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-.menu-header {
-  background-color: rgba(25, 42, 72, 0.85);
-  display: flex;
-  justify-content: space-around;
-  height: 90px;
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-BoldItalic.eot");
+  src: url("../fonts/Montserrat-BoldItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../fonts/Montserrat-BoldItalic.woff2") format("woff2"),
+    url("../fonts/Montserrat-BoldItalic.woff") format("woff"),
+    url("../fonts/Montserrat-BoldItalic.ttf") format("truetype");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
 }
 
-.menu-nav ul {
-  display: flex;
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Italic.eot");
+  src: url("../fonts/Montserrat-Italic.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Montserrat-Italic.woff2") format("woff2"),
+    url("../fonts/Montserrat-Italic.woff") format("woff"),
+    url("../fonts/Montserrat-Italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
 }
 
-.register {
-  color: #ff8080;
-  cursor: pointer;
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-MediumItalic.eot");
+  src: url("../fonts/Montserrat-MediumItalic.eot?#iefix")
+      format("embedded-opentype"),
+    url("../fonts/Montserrat-MediumItalic.woff2") format("woff2"),
+    url("../fonts/Montserrat-MediumItalic.woff") format("woff"),
+    url("../fonts/Montserrat-MediumItalic.ttf") format("truetype");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
 }
 
-.register:hover {
-  transform: scale(1.15);
-  transition-duration: 400ms;
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/Montserrat-Regular.eot");
+  src: url("../fonts/Montserrat-Regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/Montserrat-Regular.woff2") format("woff2"),
+    url("../fonts/Montserrat-Regular.woff") format("woff"),
+    url("../fonts/Montserrat-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
-.auth {
-  border: solid 1px;
-  cursor: pointer;
-}
-
-.auth:hover {
-  transform: scale(1.15);
-  transition-duration: 400ms;
-}
-
-header img {
-  padding-top: 0%;
-  margin-bottom: 0%;
+* {
+  font-family: "Montserrat";
 }
 
 h1 {
-  font-family: "nevis";
-  font-size: 44px;
+  font-size: 36px;
   color: #192a48;
   text-align: center;
   margin-top: 0;
-  padding-top: 10%;
+  padding-top: 14%;
   margin-bottom: 10%;
+  font-weight: bold;
 }
 
 .description {
-  /* background-color:rgba(174, 174, 176, 0.4); */
-  background-image: url(../assets/fond.jpg);
-  height: 730px;
-  border: solid 1px;
+  height: 720px;
+  width: auto;
 }
 
-.cart-description {
-  background-color: rgba(255, 138, 128, 0.6);
-  border-radius: 15px;
-  height: 350px;
-  width: 500px;
-  border: solid 1px #192a48;
-  margin: auto;
-  margin-top: 190px;
-}
-
-.description img {
+.groupe-photo {
   display: block;
   margin: auto;
+  width: 440px;
+  margin-bottom: 14%;
 }
 
-.cart-description button {
-  background-color: rgb(25, 42, 72, 0.6);
-  font-size: 24px;
-  display: block;
+.accessActu img {
+  width: 20px;
+  margin-top: 35px;
+}
+
+.accessActu {
+  background-color: #eeeeee;
+  width: 400px;
+  font-size: 20px;
+  display: flex;
   margin: auto;
-  margin-top: 10%;
-  padding: 10px 18px 10px 18px;
+  margin-top: 4%;
+  padding: 6px 16px 6px 16px;
   border-radius: 8px;
   box-shadow: 5px 5px 5px#192A48;
-  font-family: "nevis";
-  color: #aeaeb0;
+  color: #192a48;
+  font-weight: bold;
   border: solid #192a48 0.5px;
   cursor: pointer;
 }
 
+.accessActu p {
+  text-align: left;
+}
+
 .accessActu:hover {
-  transform: scale(1.15);
+  transform: scale(1.05);
   transition-duration: 400ms;
 }
 </style>

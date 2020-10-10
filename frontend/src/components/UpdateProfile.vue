@@ -1,15 +1,12 @@
 <template>
-  <div class="modif">
-    <div class="head-modif">
-      <img
-        src="../assets/icon-left-font-monochrome-black.svg"
-        alt="Logo Groupomania"
-        width="200"
-        class="logo-groupomania"
-      />
 
-      <p class="my-account">Mon Compte</p>
-    </div>
+  <div class="modif">
+
+      <headerPage></headerPage>
+    
+    <router-link to="/WallActu">
+      <button class="btn-return-wall"><img src="../assets/flecheReturn.svg">Retour</button>
+    </router-link>
 
     <h1>Modifier vos informations personnelles</h1>
 
@@ -17,8 +14,8 @@
     <textarea
       name="newBio"
       id="newBio"
-      v-bind:value="newBio"
-      v-on:input="newBio = $event.target.value"
+      v-bind:value="bio"
+      v-on:input="bio = $event.target.value"
     ></textarea>
 
     <button
@@ -62,11 +59,17 @@
     >
       Supprimer mon compte
     </button>
+
+    <footerPage></footerPage>
+
   </div>
+
 </template>
 
 <script>
 import axios from "axios";
+import HeaderPage from "./HeaderPage";
+import FooterPage from "./FooterPage";
 
 export default {
   name: "UpdateProfile",
@@ -76,11 +79,17 @@ export default {
       urlData: null,
       bio: "",
       email: "",
-      password: "",
+      password: ""
     };
   },
 
+  components: {
+    headerPage: HeaderPage,
+    footerPage: FooterPage,
+  },
+
   methods: {
+
     update: function (bio) {
       axios
         .put("http://localhost:3000/api/users/me/", {
@@ -108,29 +117,33 @@ export default {
 </script>
 
 <style>
-.head-modif {
-  background-color: rgba(25, 42, 72, 0.85);
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  padding: 3% 3% 1% 3%;
+
+.modif {
+  height: auto;
 }
 
-.my-account {
-  font-family: sans-serif;
+.btn-return-wall img {
+  height: 40px;
+  margin-top: -8.5%;
+}
+
+.btn-return-wall {
+  display: flex;
+  border: none;
+  background-color: white;
   font-size: 20px;
-  margin-top: 2.5%;
-  margin-bottom: 0;
-  color: #aeaeb0;
+  padding-top: 3.5%;
   cursor: pointer;
+  color: #192a48;
+  font-weight: bold;
 }
 
 .modif h1 {
-  font-family: sans-serif;
-  font-size: 26px;
-  padding-top: 8%;
+  font-size: 22px;
+  padding-top: 6%;
   margin-bottom: 8%;
   color: rgba(25, 42, 72, 0.85);
+  text-decoration: underline;
 }
 
 .modif textarea {
@@ -148,15 +161,16 @@ export default {
 
 .modif label {
   color: #192a48;
-  font-size: 20px;
-  margin-left: 70px;
+  font-size: 18px;
+  margin-left: 30px;
   font-weight: bold;
 }
 
 .btn-update {
-  /* margin-left: 6%; */
   border-radius: 25px;
-  background-color: #192a48;
+  background: #4b79a1;
+  background: -webkit-linear-gradient(to right, #283e51, #4b79a1);
+  background: linear-gradient(to right, #283e51, #4b79a1);
   font-size: 20px;
   padding: 0.5rem 3rem 0.4rem 3rem;
   border: 1px solid #192a48;
@@ -164,6 +178,7 @@ export default {
   margin: auto;
   display: block;
   cursor: pointer;
+  font-family: 'Montserrat';
 }
 .btn-update:hover {
   transform: scale(1.15);
@@ -200,7 +215,7 @@ export default {
   margin: auto;
   display: block;
   cursor: pointer;
-  font-weight: bold;
+  margin-bottom: 5%;
 }
 .btn-delete:hover {
   transform: scale(1.15);

@@ -19,7 +19,7 @@ module.exports = {
     // Params
     var title      = req.body.title;
     var content    = req.body.content;
-    var attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    // var attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
 
     if (title == null || content == null) {
       return res.status(400).json({ 'error': 'missing parameters ! ' });
@@ -28,6 +28,7 @@ module.exports = {
     if (title.length <= TITLE_LIMIT || content.length <= CONTENT_LIMIT) {
       return res.status(400).json({ 'error': 'invalid parameters' });
     }
+    
 
     models.User.findOne({
       attributes: ['id'],
@@ -35,21 +36,26 @@ module.exports = {
         id: userId,
       }
     })
+    
       .then(function (user) {
+        // console.log(userId)
         if (user) {
-          const newMessage = models.Message.create({
+            models.Message.create({
             title: title,
             content: content,
             likes: 0,
-            attachment: attachment,
-            UserId: user.id
+            // attachment: attachment,
+            userId: user.id
           })
-            .then(function (newMessage) {
-              return res.status(201).json({ newMessage })
+          
+            .then(function () {
+              console.log(user)
+              return res.status(201).json({  })
             })
 
             .catch(function (err) {
-              return res.status(500).json({ 'error': 'cannot post message!!' });
+              // console.log(err)
+              return res.status(500).json({ 'error': `cannot post message: ${err}` });
             })
 
         } else {
@@ -58,7 +64,7 @@ module.exports = {
 
       })
         .catch(function (err) {
-          return res.status(500).json({ 'error': 'unable to verify user' });
+          return res.status(500).json({ 'error': `unable to verify user: ${err}` });
         }
 
       );

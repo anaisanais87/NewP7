@@ -1,79 +1,77 @@
 <template>
-  <div class="user_register">
-    <div class="authentification" v-if="newLogin">
+  <div class="authentification">
+    <router-link to="/">
       <img src="../assets/icon-above-font1.png" width="300" />
+    </router-link>
 
-      <div class="form-auth">
-        <form class="my_form">
-          <p>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              required
-              v-bind:value="email"
-              v-on:input="email = $event.target.value"
-            />
-          </p>
-
-          <p>
-            <input
-              type="password"
-              name="password"
-              placeholder="Mot de passe"
-              required
-              v-bind:value="password"
-              v-on:input="password = $event.target.value"
-            />
-          </p>
-          <p>
-            <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Username"
-              required
-              v-bind:value="username"
-              v-on:input="username = $event.target.value"
-            />
-          </p>
-          <p>
-            <textarea
-              name="bio"
-              id="bio"
-              placeholder="Description"
-              v-bind:value="bio"
-              v-on:input="bio = $event.target.value"
-            />
-          </p>
-        </form>
-      </div>
-
-      <button
-        type="submit"
-        value="S'inscrire"
-        class="btn-auth"
-        @click="register(email, password, username, bio)"
-      > S'inscrire
-      </button>
-
-      <div class="new-auth">
+    <div class="form-auth">
+      <form class="my_form">
         <p>
-          Déjà inscrit&nbsp;?<span class="btn-register" @click="loginPage">
-            S'identifier</span>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+            v-bind:value="email"
+            v-on:input="email = $event.target.value"
+          />
         </p>
-      </div>
+
+        <p>
+          <input
+            type="password"
+            name="password"
+            placeholder="Mot de passe"
+            required
+            v-bind:value="password"
+            v-on:input="password = $event.target.value"
+          />
+        </p>
+        <p>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            placeholder="Username"
+            required
+            v-bind:value="username"
+            v-on:input="username = $event.target.value"
+          />
+        </p>
+        <p>
+          <textarea
+            name="bio"
+            id="bio"
+            placeholder="Description"
+            v-bind:value="bio"
+            v-on:input="bio = $event.target.value"
+          />
+        </p>
+      </form>
     </div>
 
-    <div v-if="login">
-      <loginUser></loginUser>
+    <button
+      type="submit"
+      value="S'inscrire"
+      class="btn-auth"
+      @click="register(email, password, username, bio)"
+    >
+      S'inscrire
+    </button>
+
+    <div class="new-auth">
+      <p>
+        Déjà inscrit&nbsp;?
+        <router-link to="/LoginUser">
+          <span class="btn-register"> S'identifier</span>
+        </router-link>
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-import LoginUser from "./LoginUser";
 
 export default {
   name: "RegisterUser",
@@ -90,16 +88,7 @@ export default {
     };
   },
 
-  components: {
-    "loginUser": LoginUser,
-  },
-
   methods: {
-
-    loginPage: function () {
-      (this.newLogin = false), (this.login = true);
-    },
-
     register: function (email, password, username, bio) {
       axios
         .post("http://localhost:3000/api/users/register/", {
@@ -111,6 +100,9 @@ export default {
         .then((response) => {
           console.log(response);
           this.urlData = response.json;
+        })
+        .then(() => {
+          this.$router.push("/WallActu");
         });
     },
   },
@@ -122,7 +114,9 @@ export default {
 .authentification img {
   display: block;
   margin: auto;
+  margin-top: 10%;
   margin-bottom: 5%;
+  cursor: pointer;
 }
 
 .form-auth {
@@ -134,6 +128,7 @@ export default {
   border-radius: 6px;
   background-color: #eeeeee;
   margin-bottom: 10%;
+  box-shadow: 5px 5px 5px #aeaeb0;
 }
 .form-auth input {
   font-size: 16px;
@@ -143,7 +138,7 @@ export default {
 }
 
 .form-auth textarea {
-  font-size: 16px;
+  font-size: 18px;
   padding: 5% 5% 5% 5%;
   border-radius: 6px;
   border: solid #192a48 1px;
@@ -152,7 +147,9 @@ export default {
 .btn-auth {
   margin-left: 6%;
   border-radius: 25px;
-  background-color: #192a48;
+  background: #4b79a1;
+  background: -webkit-linear-gradient(to right, #283e51, #4b79a1);
+  background: linear-gradient(to right, #283e51, #4b79a1);
   font-size: 20px;
   padding: 0.5rem 7.2rem 0.4rem 7.2rem;
   border: 1px solid #192a48;
@@ -167,7 +164,7 @@ export default {
 }
 
 p {
-  font-size: 22px;
+  font-size: 20px;
   color: #192a48;
 }
 

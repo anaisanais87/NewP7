@@ -1,8 +1,5 @@
 <template>
   <div class="footer">
-
-    <!-- <p><img src="../assets/icon-above-font.svg" width="100" /></p> -->
-
     <p> Copyright  &#169; Groupomania</p>
     <p>Mentions légales - Conditions générales d'utilisation</p>
   </div>
@@ -18,11 +15,13 @@ export default {
 <style>
 .footer {
   margin-bottom: 0;
-  background-color: rgba(25, 42, 72, 0.85);
+  background: #4B79A1;  
+  background: -webkit-linear-gradient(to right, #283E51, #4B79A1);  
+  background: linear-gradient(to right, #283E51, #4B79A1); 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 80px;
+  height: 90px;
 }
 
 .footer img {
@@ -31,9 +30,8 @@ export default {
 
 .footer p {
   color: #aeaeb0;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   margin: 0.5%;
 }
-
 </style>
