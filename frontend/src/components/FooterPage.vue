@@ -21,7 +21,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 90px;
+  height: 85px;
 }
 
 .footer img {
@@ -33,5 +33,23 @@ export default {
   font-size: 16px;
   text-align: center;
   margin: 0.5%;
+}
+
+@media screen and (min-width: 992px) {
+  .footer {
+    font-size: 24px;
+    height: 90px;
+  }
+}
+@media screen and (min-width: 1162px) {
+  .footer {
+    height: 95px;
+    font-size: 26px;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .footer {
+    height: 117px;
+  }
 }
 </style>

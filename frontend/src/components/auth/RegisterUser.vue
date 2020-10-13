@@ -1,31 +1,35 @@
 <template>
   <div class="authentification">
     <router-link to="/">
-      <img src="../assets/icon-above-font1.png" width="300" />
+      <img src="../../assets/icon-above-font1.png" width="300" />
     </router-link>
 
     <div class="form-auth">
-      <form class="my_form">
+      <form class="my_form" @submit.prevent="register">
         <p>
           <input
             type="email"
             name="email"
             placeholder="Email"
+            id="email"
             required
             v-bind:value="email"
             v-on:input="email = $event.target.value"
           />
+          <span id='error_email_register'></span>
         </p>
 
         <p>
           <input
             type="password"
             name="password"
+            id="password"
             placeholder="Mot de passe"
             required
             v-bind:value="password"
             v-on:input="password = $event.target.value"
           />
+          <span id='error_password_register'></span>
         </p>
         <p>
           <input
@@ -50,6 +54,10 @@
       </form>
     </div>
 
+    <!-- <button type="submit" value="S'inscrire" class="btn-auth">
+      S'inscrire
+    </button> -->
+
     <button
       type="submit"
       value="S'inscrire"
@@ -71,7 +79,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "RegisterUser",
@@ -89,22 +97,67 @@ export default {
   },
 
   methods: {
-    register: function (email, password, username, bio) {
-      axios
-        .post("http://localhost:3000/api/users/register/", {
-          email: email,
-          password: password,
-          username: username,
-          bio: bio,
-        })
-        .then((response) => {
-          console.log(response);
-          this.urlData = response.json;
-        })
-        .then(() => {
-          this.$router.push("/WallActu");
-        });
+    register: function () {
+      let data = {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+      };
+      this.$store
+        .dispatch("register", data)
+        .then(() => this.$router.push("/WallActu"))
+        .catch((err) => console.log(err));
     },
+
+    // register: function (email, password, username, bio) {
+    //   axios
+    //     .post("http://localhost:3000/api/users/register/", {
+    //       email: email,
+    //       password: password,
+    //       username: username,
+    //       bio: bio,
+    //     })
+    //     .then((response) => {
+    //       console.log(response);
+    //       this.urlData = response.json;
+    //     })
+    //     .then(() => {
+    //       this.$store.dispatch("register", { email, password })
+    //     })
+    //     .then(() => {
+    //       this.$router.push("/WallActu");
+    //     });
+    // },
+
+    validateForm: function() {                                               //Création de la fonction qui permet de valider le formulaire
+
+      // eslint-disable-next-line no-useless-escape
+      const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      // eslint-disable-next-line no-useless-escape
+      const regexPassword = /^(?=.*d).{4,8}$/;
+
+      let email     = document.getElementById("email").value;     //Déclaration des variables qui font référence aux champs du formulaire
+      let password  = document.getElementById("password").value;
+      
+    let formSubmit = true;
+    
+
+    if (!regexEmail.test(email)) {                                     //SI la valeur de l'adresse email est différente de la regexEmail alors:
+
+        var messageError = "Format saisi invalide !";           
+        console.log(messageError)
+        document.getElementById("error_mail_register").textContent = messageError;  //Un message d'erreur s'affiche 
+        formSubmit = false;                                                //Et la valeur formSubmit renvoie false
+
+    }
+
+    if (!regexPassword.test(password))                                     //Je répète l'opération avec toutes les valeurs de tous les champs
+        document.getElementById("error_password_register").textContent = messageError;
+
+    if (formSubmit === true) {                                              //Lorsque formSubmit renvoie true, le formulaire est rempli correctement
+        
+    }
+}
   },
 };
 </script>

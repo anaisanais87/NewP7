@@ -68,6 +68,7 @@
 
 <script>
 import axios from "axios";
+// import vuex from "vuex";
 import HeaderPage from "./HeaderPage";
 import FooterPage from "./FooterPage";
 
@@ -101,17 +102,31 @@ export default {
         });
     },
 
-    deleteProfile: function (email, password) {
-      axios
-        .delete("http://localhost:3000/api/users/delete/", {
-          email: email,
-          password: password,
-        })
-        .then((response) => {
-          console.log(response);
-          this.urlData = response.json;
-        });
+    deleteProfile: function () {
+      let data = {
+        email: this.email,
+        password: this.password,
+      };
+      this.$store
+        .dispatch("deleteProfile", data)
+        .then(() => this.$router.push("/"))
+        .catch((err) => console.log(err));
     },
+
+    // deleteProfile: function (email, password) {
+    //   axios
+    //     .delete("http://localhost:3000/api/users/delete/", {
+    //       email: email,
+    //       password: password,
+    //     })
+    //     .then((response) => {
+    //       console.log(response);
+    //       this.urlData = response.json;
+    //     })
+    //     .then(() => {
+    //       this.$store.dispatch(AUTH_LOGOUT)
+    //     })
+    // },
   },
 };
 </script>

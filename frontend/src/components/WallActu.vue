@@ -93,8 +93,7 @@ export default {
 
   data() {
     return {
-      username: this.$store.username,
-      // username: this.$route.username,
+      username: this.username,
       urlData: null,
       title: "",
       content: "",

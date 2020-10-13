@@ -1,19 +1,41 @@
 <template>
-  <div id="app">
+  <!-- <div id="app">
     <router-view></router-view>
-    <!-- <homePage></homePage> -->
-  </div>
+  </div> -->
+
+      <div id="app">
+        <div id="nav">
+          <!-- <router-link to="/">HomePage</router-link> | -->
+          
+          <!-- <span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
+          <span v-else> | <router-link to="/login">Login</router-link></span> -->
+        </div>
+        <router-view/>
+      </div>
+
 </template>
 
 <script>
 // import HomePage from './components/HomePage.vue'
 
+// export default {
+//   name: 'App',
+// }
 export default {
-  name: 'App',
-  // components: {
-  //   'homePage': HomePage
-  // }
-}
+      computed: {
+        isLoggedIn: function() {
+          return this.$store.getters.isLoggedIn;
+        }
+      },
+      methods: {
+        logout: function() {
+          this.$store.dispatch("logout").then(() => {
+            this.$router.push("/LoginUser");
+          });
+        }
+      }
+    };
+
 </script>
 
 <style>
