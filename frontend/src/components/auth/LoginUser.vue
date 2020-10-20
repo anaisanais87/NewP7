@@ -34,14 +34,6 @@
       </form>
     </div>
 
-    <!-- <button
-      type="submit"
-      value="S'identifier"
-      class="btn-auth"
-    >
-      S'identifier
-    </button> -->
-
     <button
       type="submit"
       value="S'identifier"
@@ -64,9 +56,6 @@
 
 
 <script>
-// import axios from "axios";
-// import { mapActions } from 'vuex';
-// import vuex from "vuex";
 
 export default {
   name: "LoginUser",
@@ -94,20 +83,6 @@ export default {
               .catch(err => console.log(err));
   },
 
-    // login: function (email, password) {
-    //   axios
-    //     .post("http://localhost:3000/api/users/login/", {
-    //       email: email,
-    //       password: password,
-    //     })
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.urlData = response.json;
-    //     })
-    //     .then(() => {
-    //       this.$router.push("/WallActu")
-    //     })
-    // },
 
     validateForm: function() {                                               //Création de la fonction qui permet de valider le formulaire
 
@@ -211,4 +186,63 @@ p {
   color: #fd2d01;
   font-weight: bold;
 }
+
+@media screen and (min-width: 500px) {
+  .authentification img {
+    margin-top: 5%;
+  }
+
+  .form-auth {
+    padding: 8% 8% 8% 8%;
+  }
+}
+@media screen and (min-width: 550px) {
+  .authentification img {
+    margin-top: 5%;
+  }
+
+  .form-auth {
+    padding: 6% 6% 6% 6%;
+    margin-bottom: 6%;
+  }
+
+  .new-auth { 
+    font-size: 19px;
+    margin-top: 4%;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .form-auth {
+    padding: 4% 4% 4% 4%;
+    margin-bottom: 6%;
+  }
+  .btn-auth {
+    font-size: 22px;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .authentification img {
+    margin-top: 3%;
+    margin-bottom: 3%;
+  }
+  .form-auth {
+    margin-bottom: 4%;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .authentification img {
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+  .form-auth {
+    margin-bottom: 3%;
+  }
+  .new-auth { 
+    font-size: 21px;
+    margin-top: 2%;
+  }
+}
+
 </style>

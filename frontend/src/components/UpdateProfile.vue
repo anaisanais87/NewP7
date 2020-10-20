@@ -1,11 +1,11 @@
 <template>
-
   <div class="modif">
+    <headerPage></headerPage>
 
-      <headerPage></headerPage>
-    
     <router-link to="/WallActu">
-      <button class="btn-return-wall"><img src="../assets/flecheReturn.svg">Retour</button>
+      <button class="btn-return-wall">
+        <img src="../assets/flecheReturn.svg" />Retour
+      </button>
     </router-link>
 
     <h1>Modifier vos informations personnelles</h1>
@@ -56,14 +56,13 @@
       value="Supprimer mon compte"
       class="btn-delete"
       @click="deleteProfile(email, password)"
+      v-if="isLoggedIn"
     >
       Supprimer mon compte
     </button>
 
     <footerPage></footerPage>
-
   </div>
-
 </template>
 
 <script>
@@ -80,8 +79,14 @@ export default {
       urlData: null,
       bio: "",
       email: "",
-      password: ""
+      password: "",
     };
+  },
+
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn;
+    },
   },
 
   components: {
@@ -90,7 +95,6 @@ export default {
   },
 
   methods: {
-
     update: function (bio) {
       axios
         .put("http://localhost:3000/api/users/me/", {
@@ -113,26 +117,11 @@ export default {
         .catch((err) => console.log(err));
     },
 
-    // deleteProfile: function (email, password) {
-    //   axios
-    //     .delete("http://localhost:3000/api/users/delete/", {
-    //       email: email,
-    //       password: password,
-    //     })
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.urlData = response.json;
-    //     })
-    //     .then(() => {
-    //       this.$store.dispatch(AUTH_LOGOUT)
-    //     })
-    // },
   },
 };
 </script>
 
 <style>
-
 .modif {
   height: auto;
 }
@@ -159,6 +148,7 @@ export default {
   margin-bottom: 8%;
   color: rgba(25, 42, 72, 0.85);
   text-decoration: underline;
+  text-align: center;
 }
 
 .modif textarea {
@@ -193,7 +183,7 @@ export default {
   margin: auto;
   display: block;
   cursor: pointer;
-  font-family: 'Montserrat';
+  font-family: "Montserrat";
 }
 .btn-update:hover {
   transform: scale(1.15);
@@ -235,5 +225,118 @@ export default {
 .btn-delete:hover {
   transform: scale(1.15);
   transition-duration: 400ms;
+}
+
+@media screen and (min-width: 500px) {
+  .modif h1 {
+    font-size: 26px;
+    margin-top: -2%;
+    margin-bottom: 6%;
+  }
+
+  .modif textarea {
+    width: 450px;
+    margin-top: 3%;
+    margin-bottom: 5%;
+  }
+
+  .modif label {
+    font-size: 20px;
+    margin-left: 45px;
+  }
+
+  .btn-update {
+    font-size: 22px;
+  }
+
+  .form-delete {
+    width: 350px;
+    padding: 8% 8% 8% 8%;
+  }
+
+  .modif input {
+    font-size: 22px;
+  }
+
+  .btn-delete {
+    font-size: 22px;
+  }
+}
+@media screen and (min-width: 650px) {
+  .modif h1 {
+    font-size: 28px;
+    margin-top: -4%;
+    margin-bottom: 5%;
+  }
+
+  .modif textarea {
+    width: 500px;
+    margin-top: 2%;
+  }
+
+  .modif label {
+    font-size: 22px;
+    margin-left: 105px;
+  }
+
+  .form-delete {
+    width: 400px;
+    padding: 6% 6% 6% 6%;
+  }
+
+  .modif input {
+    font-size: 22px;
+  }
+
+  .btn-delete {
+    font-size: 22px;
+  }
+}
+@media screen and (min-width: 800px) {
+  .btn-return-wall img {
+    margin-top: -8.5%;
+  }
+
+  .btn-return-wall {
+    font-size: 20px;
+    padding-top: 2%;
+  }
+
+  .modif h1 {
+    font-size: 28px;
+    margin-top: -5%;
+    margin-bottom: 5%;
+  }
+
+  .modif textarea {
+    width: 700px;
+    margin-top: 2%;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .modif h1 {
+    font-size: 30px;
+  }
+  .modif textarea {
+    width: 850px;
+    height: 90px;
+    margin-top: 2%;
+  }
+}
+@media screen and (min-width: 1100px) {
+  .modif h1 {
+    font-size: 32px;
+  }
+  .modif textarea {
+    width: 1400px;
+    height: 30px;
+    margin-top: 1%;
+    margin-bottom: 2%;
+  }
+  .form-delete {
+    margin-top: 4%;
+    margin-bottom: 2%;
+  }
 }
 </style>

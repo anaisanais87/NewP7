@@ -6,7 +6,16 @@
       <h1>Bienvenue sur votre communauté Groupomania</h1>
       <img src="../assets/groupe1.jpg" class="img-homePage" />
 
-      <div class="cart-description">
+      <div class="cart-description"  v-if="isLoggedIn">
+        <router-link to="/WallActu">
+          <button class="accessActu">
+            <p>Partager et d'échanger avec tous vos collaborateurs !</p>
+            <img src="../assets/fleche1.svg" class="arrow" />
+          </button>
+        </router-link>
+      </div>
+
+      <div class="cart-description"  v-else>
         <router-link to="/RegisterUSer">
           <button class="accessActu">
             <p>Partager et d'échanger avec tous vos collaborateurs !</p>
@@ -14,6 +23,7 @@
           </button>
         </router-link>
       </div>
+
     </div>
 
     <footerPage></footerPage>
@@ -31,6 +41,12 @@ export default {
   components: {
     headerPage: HeaderPage,
     footerPage: FooterPage,
+  },
+
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn;
+    },
   },
 };
 </script>
@@ -384,7 +400,7 @@ export default {
 
 @media screen and (min-width: 1224px) {
   .description {
-    height: 780px;
+    height: 750px;
   }
 }
 

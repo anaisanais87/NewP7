@@ -54,10 +54,6 @@
       </form>
     </div>
 
-    <!-- <button type="submit" value="S'inscrire" class="btn-auth">
-      S'inscrire
-    </button> -->
-
     <button
       type="submit"
       value="S'inscrire"
@@ -79,7 +75,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 
 export default {
   name: "RegisterUser",
@@ -105,48 +100,27 @@ export default {
       };
       this.$store
         .dispatch("register", data)
-        .then(() => this.$router.push("/WallActu"))
+        .then(() => this.$router.push("/LoginUser"))
         .catch((err) => console.log(err));
     },
-
-    // register: function (email, password, username, bio) {
-    //   axios
-    //     .post("http://localhost:3000/api/users/register/", {
-    //       email: email,
-    //       password: password,
-    //       username: username,
-    //       bio: bio,
-    //     })
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.urlData = response.json;
-    //     })
-    //     .then(() => {
-    //       this.$store.dispatch("register", { email, password })
-    //     })
-    //     .then(() => {
-    //       this.$router.push("/WallActu");
-    //     });
-    // },
 
     validateForm: function() {                                               //Création de la fonction qui permet de valider le formulaire
 
       // eslint-disable-next-line no-useless-escape
       const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       // eslint-disable-next-line no-useless-escape
-      const regexPassword = /^(?=.*d).{4,8}$/;
+      const regexPassword = /^(?=.*\d).{4,8}$/;
 
       let email     = document.getElementById("email").value;     //Déclaration des variables qui font référence aux champs du formulaire
       let password  = document.getElementById("password").value;
-      
-    let formSubmit = true;
-    
+
+      let formSubmit = true;
 
     if (!regexEmail.test(email)) {                                     //SI la valeur de l'adresse email est différente de la regexEmail alors:
 
         var messageError = "Format saisi invalide !";           
         console.log(messageError)
-        document.getElementById("error_mail_register").textContent = messageError;  //Un message d'erreur s'affiche 
+        document.getElementById("error_email_register").textContent = messageError;  //Un message d'erreur s'affiche 
         formSubmit = false;                                                //Et la valeur formSubmit renvoie false
 
     }
@@ -216,7 +190,7 @@ export default {
   transition-duration: 400ms;
 }
 
-p {
+.form-auth p {
   font-size: 20px;
   color: #192a48;
 }
@@ -238,4 +212,64 @@ p {
   color: #fd2d01;
   font-weight: bold;
 }
+
+@media screen and (min-width: 500px) {
+  .authentification img {
+    margin-top: 5%;
+  }
+
+  .form-auth {
+    padding: 8% 8% 8% 8%;
+  }
+}
+@media screen and (min-width: 550px) {
+  .authentification img {
+    margin-top: 5%;
+  }
+
+  .form-auth {
+    padding: 6% 6% 6% 6%;
+    margin-bottom: 6%;
+  }
+
+  .new-auth { 
+    font-size: 19px;
+    margin-top: 4%;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .form-auth {
+    padding: 4% 4% 4% 4%;
+    margin-bottom: 6%;
+  }
+  .btn-auth {
+    font-size: 22px;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .authentification img {
+    margin-top: 3%;
+    margin-bottom: 3%;
+  }
+  .form-auth {
+    margin-bottom: 4%;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .authentification img {
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+  .form-auth {
+    margin-bottom: 3%;
+  }
+  .new-auth { 
+    font-size: 21px;
+    margin-top: 2%;
+  }
+}
+
+
 </style>

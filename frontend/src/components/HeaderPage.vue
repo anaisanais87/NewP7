@@ -1,16 +1,23 @@
 <template>
   <div class="menu-header">
     <router-link to="/">
-      <img
-        src="../assets/icon-left-font-monochrome-black.svg"
-        class="logo-groupomania"
-      />
+      <img src="../assets/icon-left-font-monochrome-black.svg" class="logo" />
     </router-link>
 
-    <div class="account" v-if="isLogin">
-      <router-link to="/UpdateProfile">
-        <p>Mon Compte</p>
-      </router-link>
+    <div class="account" v-if="isLoggedIn">
+      <div v-on:click.prevent="showDropDown = !showDropDown">
+        <div class="my-account">
+          <img src="../assets/user_icon.svg" width="25px" />Mon Compte
+          <span></span>
+        </div>
+      </div>
+
+      <div v-if="!showDropDown" class="menu-burger">
+        <ul>
+          <router-link to="/UpdateProfile"><li>Paramètres</li></router-link>
+          <li @click="logout">Déconnexion</li>
+        </ul>
+      </div>
     </div>
 
     <div class="menu-nav" v-else>
@@ -32,15 +39,40 @@
 export default {
   name: "HeaderPage",
 
+  data() {
+    return {
+      showDropDown: true,
+      email: "",
+      password: "",
+    };
+  },
+  computed: {
+    isLoggedIn: function () {
+      return this.$store.getters.isLoggedIn;
+    },
+  },
+
   methods: {
-    // isLoggedIn: function () {
-    //   return this.$store.getters.isLoggedIn;
-    // },
+    logout: function () {
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/");
+      });
+    },
   },
 };
 </script>
 
 <style>
+
+.my-account {
+  cursor: pointer;
+  color: #ff8a80;
+  font-size: 22px;
+}
+
+.my-account img {
+  margin-right: 6px;
+}
 .menu-header {
   background: #4b79a1;
   background: -webkit-linear-gradient(to right, #283e51, #4b79a1);
@@ -51,7 +83,7 @@ export default {
   padding: 3% 3% 1% 3%;
 }
 
-.menu-header img {
+.logo {
   cursor: pointer;
   margin-top: 6%;
   width: 170px;
@@ -68,11 +100,30 @@ a {
 
 li {
   font-size: 20px;
-  font-family: "nevis";
+  /* font-family: "nevis"; */
   color: #ff8a80;
   list-style: none;
   padding: 14px 7px 14px 7px;
   margin-top: -15%;
+}
+
+.menu-burger {
+  height: 20px;
+  width: 20px;
+  position: relative;
+  float: left;
+  margin-left: -25px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.menu-burger li {
+  font-size: 20px;
+  width: 200px;
+  padding-left: 20px;
+  background-color: #4b779e;
+  border: 1.5px solid #283e51;
+  
 }
 
 .register {
@@ -105,14 +156,14 @@ li {
 }
 
 @media screen and (min-width: 480px) {
-  .menu-header img {
+  .logo {
     width: 210px;
     margin-top: 3%;
   }
 }
 
 @media screen and (min-width: 530px) {
-  .menu-header img {
+  .logo {
     width: 235px;
     margin-top: 2%;
   }
@@ -120,19 +171,27 @@ li {
   li {
     font-size: 24px;
   }
+
+  .menu-burger {
+    margin-top: 12px;
+  }
 }
 
 @media screen and (min-width: 749px) {
-  .menu-header img {
+  .logo {
     margin-top: 1%;
   }
   li {
     padding: 14px 10px 14px 10px;
   }
+
+  .menu-burger {
+    margin-top: 14px;
+  }
 }
 
-@media screen and (min-width: 938px){
-  .menu-header img {
+@media screen and (min-width: 938px) {
+  .logo {
     width: 255px;
     margin-top: -1%;
   }
@@ -140,19 +199,25 @@ li {
     margin-top: -18%;
     padding: 14px 16px 14px 16px;
   }
+
+  .menu-burger {
+    margin-top: 15px;
+  }
   .register {
     margin-top: -21%;
   }
 }
 
 @media screen and (min-width: 992px) {
-.menu-header img {
+  .logo {
     width: 275px;
     margin-top: -2%;
   }
   li {
     font-size: 26px;
   }
-
+  .menu-burger {
+    margin-top: 20px;
+  }
 }
 </style>
