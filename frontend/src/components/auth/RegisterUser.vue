@@ -16,7 +16,7 @@
             v-bind:value="email"
             v-on:input="email = $event.target.value"
           />
-          <span id='error_email_register'></span>
+          <span id="error_email_register"></span>
         </p>
 
         <p>
@@ -29,7 +29,7 @@
             v-bind:value="password"
             v-on:input="password = $event.target.value"
           />
-          <span id='error_password_register'></span>
+          <span id="error_password_register"></span>
         </p>
         <p>
           <input
@@ -75,7 +75,6 @@
 </template>
 
 <script>
-
 export default {
   name: "RegisterUser",
 
@@ -98,40 +97,60 @@ export default {
         email: this.email,
         password: this.password,
       };
+
+      
+      try {
+          this.validateForm(this.email, this.password)
+      }
+      
+      catch(err) {
+          console.log(err)
+          return 
+      }
+
       this.$store
         .dispatch("register", data)
         .then(() => this.$router.push("/LoginUser"))
         .catch((err) => console.log(err));
     },
 
-    validateForm: function() {                                               //Création de la fonction qui permet de valider le formulaire
+    validateForm: function (email, password) {
+      //Création de la fonction qui permet de valider le formulaire
 
       // eslint-disable-next-line no-useless-escape
       const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       // eslint-disable-next-line no-useless-escape
       const regexPassword = /^(?=.*\d).{4,8}$/;
 
-      let email     = document.getElementById("email").value;     //Déclaration des variables qui font référence aux champs du formulaire
-      let password  = document.getElementById("password").value;
-
       let formSubmit = true;
+      var messageError = "Format saisi invalide !";
 
-    if (!regexEmail.test(email)) {                                     //SI la valeur de l'adresse email est différente de la regexEmail alors:
+      console.log(email);
+      console.log(password);
 
-        var messageError = "Format saisi invalide !";           
-        console.log(messageError)
-        document.getElementById("error_email_register").textContent = messageError;  //Un message d'erreur s'affiche 
-        formSubmit = false;                                                //Et la valeur formSubmit renvoie false
+      if (!regexEmail.test(email)) {
+        //SI la valeur de l'adresse email est différente de la regexEmail alors:
 
-    }
+        
+        console.log(messageError);
+        document.getElementById("error_email_register").textContent = messageError; //Un message d'erreur s'affiche
+        formSubmit = false; //Et la valeur formSubmit renvoie false
 
-    if (!regexPassword.test(password))                                     //Je répète l'opération avec toutes les valeurs de tous les champs
+        throw new Error("L'email n'est pas au bon format !");
+      }
+
+      if (!regexPassword.test(password)){
+
+        //Je répète l'opération avec toutes les valeurs de tous les champs
         document.getElementById("error_password_register").textContent = messageError;
 
-    if (formSubmit === true) {                                              //Lorsque formSubmit renvoie true, le formulaire est rempli correctement
-        
-    }
-}
+        throw new Error("Le password n'est pas au bon format !");
+      }
+
+      if (formSubmit === true) {
+        //Lorsque formSubmit renvoie true, le formulaire est rempli correctement
+      }
+    },
   },
 };
 </script>
@@ -232,7 +251,7 @@ export default {
     margin-bottom: 6%;
   }
 
-  .new-auth { 
+  .new-auth {
     font-size: 19px;
     margin-top: 4%;
   }
@@ -265,11 +284,9 @@ export default {
   .form-auth {
     margin-bottom: 3%;
   }
-  .new-auth { 
+  .new-auth {
     font-size: 21px;
     margin-top: 2%;
   }
 }
-
-
 </style>

@@ -56,6 +56,8 @@
               id="photo"
               type="file"
               accept="image/png, image/jpeg, image/jpg"
+              @change="previewFiles"
+              unique
             />
           </div>
 
@@ -129,6 +131,9 @@ export default {
   },
 
   methods: {
+    previewFiles(event) {
+      console.log(event.target.files);
+   },
 
     publish: function (title, content, attachment) {
       axios
@@ -143,6 +148,8 @@ export default {
         });
     },
 
+
+
     addLike: function (messageId) {
       axios
         .post("http://localhost:3000/api/messages/:messageId/vote/like", {
@@ -154,6 +161,7 @@ export default {
         });
     },
   },
+
 };
 </script>
 

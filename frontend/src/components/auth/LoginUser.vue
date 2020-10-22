@@ -16,7 +16,7 @@
             v-bind:value="email"
             v-on:input="email = $event.target.value"
           />
-          <span id='error_mail'></span>
+          <span id="error_mail"></span>
         </p>
 
         <p>
@@ -29,7 +29,7 @@
             v-bind:value="password"
             v-on:input="password = $event.target.value"
           />
-          <span id='error_password'></span>
+          <span id="error_password"></span>
         </p>
       </form>
     </div>
@@ -56,7 +56,6 @@
 
 
 <script>
-
 export default {
   name: "LoginUser",
 
@@ -73,44 +72,54 @@ export default {
   },
 
   methods: {
+    login: function () {
+      let email = this.email;
+      let password = this.password;
 
-   login: function() {
-            let email = this.email;
-            let password = this.password;
-            this.$store
-              .dispatch("login", { email, password })
-              .then(() => this.$router.push("/WallActu"))
-              .catch(err => console.log(err));
-  },
+      try {
+        this.validateForm(this.email, this.password);
+      } catch (err) {
+        console.log(err);
+        return;
+      }
 
+      this.$store
+        .dispatch("login", { email, password })
+        .then(() => this.$router.push("/WallActu"))
+        .catch((err) => console.log(err));
+    },
 
-    validateForm: function() {                                               //Création de la fonction qui permet de valider le formulaire
+    validateForm: function (email, password) {
+      //Création de la fonction qui permet de valider le formulaire
 
-      // const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      // const PASSWORD_REGEX = /^(?=.*\d).{4,8}$/;
-      
-    // let email     = document.getElementById("email").value;     //Déclaration des variables qui font référence aux champs du formulaire
-    // let password  = document.getElementById("password").value;
-  
-    let formSubmit = true;
-    
+      // eslint-disable-next-line no-useless-escape
+      const regexEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      // eslint-disable-next-line no-useless-escape
+      const regexPassword = /^(?=.*\d).{4,8}$/;
 
-    if (!this.regexEmail.test(this.email)) {                                     //SI la valeur de l'adresse email est différente de la regexEmail alors:
+      let formSubmit = true;
+      // var messageError = "Format saisi invalide !";
 
-        var messageError = "Format saisi invalide !";           
-        document.getElementById("error_mail").textContent = messageError;  //Un message d'erreur s'affiche 
-        formSubmit = false;                                                //Et la valeur formSubmit renvoie false
+      if (!regexEmail.test(email)) {
+        //SI la valeur de l'adresse email est différente de la regexEmail alors:
 
-    }
+        document.getElementById("error_mail").textContent = "Email invalide !"; //Un message d'erreur s'affiche
+        formSubmit = false; //Et la valeur formSubmit renvoie false
 
-    if (!this.regexPassword.test(this.password))                                     //Je répète l'opération avec toutes les valeurs de tous les champs
-        document.getElementById("error_password").textContent = messageError;
+        throw new Error("L'email n'est pas au bon format !");
+      }
 
-    if (formSubmit === true) {                                              //Lorsque formSubmit renvoie true, le formulaire est rempli correctement
-        
-    }
-}
+      if (!regexPassword.test(password)) {
+        //Je répète l'opération avec toutes les valeurs de tous les champs
+        document.getElementById("error_password").textContent = "Mot de passe invalide !";
 
+        throw new Error("Le password n'est pas au bon format !");
+      }
+
+      if (formSubmit === true) {
+        //Lorsque formSubmit renvoie true, le formulaire est rempli correctement
+      }
+    },
   },
 };
 </script>
@@ -206,7 +215,7 @@ p {
     margin-bottom: 6%;
   }
 
-  .new-auth { 
+  .new-auth {
     font-size: 19px;
     margin-top: 4%;
   }
@@ -239,10 +248,9 @@ p {
   .form-auth {
     margin-bottom: 3%;
   }
-  .new-auth { 
+  .new-auth {
     font-size: 21px;
     margin-top: 2%;
   }
 }
-
 </style>

@@ -1,56 +1,7 @@
-// 'use strict';
-// module.exports = {
-//   up: async (queryInterface, Sequelize) => {
-//     await queryInterface.createTable('Messages', {
-//       id: {
-//         allowNull: false,
-//         autoIncrement: true,
-//         primaryKey: true,
-//         type: Sequelize.INTEGER
-//       },
-//       userId: {
-//         allowNull: false,
-//         type: Sequelize.INTEGER,
-//         references: {
-//           model: 'Users',
-//           key: 'id'
-//         }
-//       },
-//       title: {
-//         allowNull: false,
-//         type: Sequelize.STRING
-//       },
-//       content: {
-//         allowNull: false,
-//         type: Sequelize.STRING
-//       },
-//       attachment: {
-//         allowNull: true,
-//         type: Sequelize.STRING
-//       },
-//       likes: {
-//         allowNull: false,
-//         type: Sequelize.INTEGER
-//       },
-//       createdAt: {
-//         allowNull: false,
-//         type: Sequelize.DATE
-//       },
-//       updatedAt: {
-//         allowNull: false,
-//         type: Sequelize.DATE
-//       }
-//     });
-//   },
-//   down: async (queryInterface, Sequelize) => {
-//     await queryInterface.dropTable('Messages');
-//   }
-// };
-
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Messages', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('Messages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -58,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        // allowNull: false,
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: 'Users',
@@ -91,7 +42,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Messages');
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('Messages');
   }
 };
