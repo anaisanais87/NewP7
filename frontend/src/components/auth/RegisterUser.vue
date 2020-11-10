@@ -36,7 +36,7 @@
             type="text"
             name="username"
             id="username"
-            placeholder="Username"
+            placeholder="Nom d'utilisateur"
             required
             v-bind:value="username"
             v-on:input="username = $event.target.value"

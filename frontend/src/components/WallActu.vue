@@ -4,22 +4,12 @@
 
     <div class="wall">
       <h1>
-        Bonjour {{ username }} ! <br />
+        Bonjour ! <br />
         Partager et échanger avec vos collègues !
       </h1>
 
       <div class="write-post">
-        <p class="create-post">
-          &nbsp;Créer une publication
-          <button
-            type="submit"
-            value="Publier"
-            class="btn-publish"
-            @click="publish(title, content, attachment)"
-          >
-            Publier
-          </button>
-        </p>
+        <p class="create-post">&nbsp;Créer une publication</p>
 
         <div class="write">
           <img src="../assets/pen_write.png" width="35px" height="40px" />
@@ -41,42 +31,37 @@
               v-on:input="content = $event.target.value"
               placeholder="Rédiger un post"
             />
+
+            <div class="image-upload">
+              <label for="file">
+                <img src="../assets/photo_red.png" width="35px" height="35px" />
+                <span>Multimedia</span>
+              </label>
+
+              <input
+                style="display: none"
+                id="file"
+                type="file"
+                ref="fileInput"
+                @change="onFileSelected"
+              />
+              <button @click="onUpload(title, content)" class="btn-upload-file">
+                Télécharger
+              </button>
+            </div>
           </div>
         </div>
 
         <div class="post">
-
           <div class="image-upload">
-            <label for="photo">
-              <img src="../assets/photo_red.png" width="35px" height="35px" />
-              <span>Photo</span>
-            </label>
-
-            <input
-              id="photo"
-              type="file"
-              accept="image/png, image/jpeg, image/jpg"
-              @change="previewFiles"
-              unique
-            />
-          </div>
-
-          <div class="image-upload">
-            <label for="gif">
-              <img src="../assets/gif.png" width="35px" height="35px" />
-              <span>Gif</span>
-            </label>
-
-            <input id="gif" type="file" accept="image/gif" />
-          </div>
-
-          <div class="image-upload">
-            <label for="doc">
-              <img src="../assets/doc_color.png" width="35px" height="35px" />
-              <span>Document</span>
-            </label>
-
-            <input id="doc" type="file" accept="image/pdf" />
+            <button
+              type="submit"
+              value="Publier"
+              class="btn-publish"
+              @click="publish(title, content, attachment)"
+            >
+              Publier
+            </button>
           </div>
         </div>
       </div>
@@ -84,20 +69,17 @@
       <div class="news">
         <p class="news-title">&nbsp;Fil d'actualité</p>
 
-        <p
-          class="new-post"
-          v-bind:value="postUsers"
-          v-on:input="postUsers = $event.target.value"
-        >
-          Publication des autres utilisateurs {{ postUsers }}
-        </p>
-
-        <div class="react-news">
-          <img src="../assets/like_blue.png" width="30px" height="30px" />
-          <p @click="addLike">&nbsp;J'aime</p>
-
-          <img src="../assets/bubble_blue.png" width="35px" height="35px" />
-          <p @click="comment">&nbsp;Commenter</p>
+        <div>
+          <post
+            v-for="message in response"
+            :key="message.id"
+            :title="message.title"
+            :content="message.content"
+            :fileToDisplay="message.attachment"
+            :userId="message.userId"
+            :messageId="message.id"
+            class="allPost"
+          ></post>
         </div>
       </div>
     </div>
@@ -110,63 +92,91 @@
 import axios from "axios";
 import HeaderPage from "./HeaderPage";
 import FooterPage from "./FooterPage";
+import Post from "./Post";
 
 export default {
   name: "WallActu",
 
   data() {
     return {
-      username: this.username,
       urlData: null,
+      selectedFile: null,
       title: "",
       content: "",
       attachment: "",
-      postUser: this.$route.listMessages,
+      response: [],
     };
   },
 
   components: {
     headerPage: HeaderPage,
     footerPage: FooterPage,
+    post: Post,
+  },
+
+  created() {
+    this.allPost();
   },
 
   methods: {
-    previewFiles(event) {
-      console.log(event.target.files);
-   },
+    onFileSelected(event) {
+      this.selectedFile = event.target.files[0];
+    },
+
+    onUpload(title, content) {
+      const formData = new FormData();
+      formData.append("image", this.selectedFile);
+      formData.append("title", title);
+      formData.append("content", content);
+
+      console.log(formData);
+      axios
+        .post(
+          "http://localhost:3000/api/messages/new/",
+
+          formData
+        )
+
+        .then((res) => {
+          console.log(res);
+        });
+    },
 
     publish: function (title, content, attachment) {
       axios
         .post("http://localhost:3000/api/messages/new/", {
           title: title,
           content: content,
-          attachment: attachment
+          attachment: attachment,
         })
         .then((response) => {
           console.log(response);
-          this.urlData = response.json;
+          this.response = response.json;
+        })
+
+        .catch((error) => {
+          console.log(error);
         });
     },
 
-
-
-    addLike: function (messageId) {
+    allPost: function () {
       axios
-        .post("http://localhost:3000/api/messages/:messageId/vote/like", {
-          messageId: messageId,
-        })
+        .get("http://localhost:3000/api/messages")
+
         .then((response) => {
-          console.log(response);
-          this.urlData = response.json;
+          this.response = response.data;
+          // console.log(this.response)
+        })
+
+        .catch((error) => {
+          console.log(error);
         });
     },
   },
-
 };
 </script>
 
 <style>
-
 .wall {
   height: auto;
 }
@@ -195,13 +205,14 @@ export default {
 }
 
 .btn-publish {
-  border: none;
+  border-radius: 5px;
   cursor: pointer;
   color: rgba(25, 42, 72, 0.85);
   font-size: 16px;
   font-weight: bold;
-  margin-left: 26%;
-  margin-top: 1.5%;
+  display: block;
+  margin: auto;
+  margin-top: 2%;
 }
 
 .btn-publish:hover {
@@ -214,7 +225,7 @@ export default {
   border: solid 0.2px;
   border-top: none;
   width: 350px;
-  height: 100px;
+  height: 160px;
   margin: auto;
   margin-top: 0;
   color: #aeaeb0;
@@ -227,18 +238,20 @@ export default {
 }
 
 .post {
-  display: flex;
-  justify-content: space-around;
   border: solid 0.2px;
   border-top: none;
   width: 350px;
   height: 40px;
   margin: auto;
   margin-top: 0;
-  font-size: 14px;
+  font-size: 18px;
   color: #192a48;
   padding: 0.5rem 0.5rem 0.4rem 0.5rem;
   cursor: pointer;
+}
+
+.btn-upload--file {
+  padding-top: 10px;
 }
 
 .image-upload > input {
@@ -254,6 +267,7 @@ export default {
   display: block;
   margin-top: -30px;
   margin-left: 40px;
+  padding-bottom: 15px;
   cursor: pointer;
 }
 
@@ -296,7 +310,7 @@ export default {
   height: 30px;
   margin: auto;
   display: block;
-  margin-top: 5%;
+  margin-top: 10%;
   font-size: 16px;
   background-color: #eeeeee;
   color: #aeaeb0;
@@ -304,42 +318,18 @@ export default {
   padding: 0.5rem 0.5rem 0.4rem 0.5rem;
 }
 
-.new-post {
-  display: flex;
+.allPost {
   border: solid 0.2px;
   border-top: none;
   width: 350px;
-  height: 300px;
+  height: auto;
   margin: auto;
   margin-top: 0;
   font-size: 16px;
-  color: #aeaeb0;
-  font-style: italic;
-  padding: 0.5rem 0.5rem 0.4rem 0.5rem;
-}
-
-.react-news {
-  display: flex;
-  justify-content: space-around;
-  border: solid 0.2px;
-  border-top: none;
-  width: 350px;
-  height: 40px;
-  margin: auto;
-  margin-top: 0;
-  font-size: 14px;
   color: #192a48;
   padding: 0.5rem 0.5rem 0.4rem 0.5rem;
-  font-family: "nevis";
-}
-.react-news img {
-  margin-right: -18%;
-  cursor: pointer;
-}
-
-.react-news img:hover {
-  transform: scale(1.15);
-  transition-duration: 400ms;
+  margin-bottom: 5%;
+  border-top: solid 0.2px;
 }
 
 @media screen and (min-width: 600px) {
@@ -354,8 +344,6 @@ export default {
 
   .btn-publish {
     font-size: 18px;
-    margin-left: 36%;
-    margin-top: 1%;
   }
 
   .write {
@@ -388,14 +376,9 @@ export default {
     font-size: 18px;
   }
 
-  .new-post {
+  .allPost {
     width: 450px;
     font-size: 18px;
-  }
-
-  .react-news {
-    width: 450px;
-    font-size: 16px;
   }
 }
 
@@ -412,8 +395,6 @@ export default {
 
   .btn-publish {
     font-size: 18px;
-    margin-left: 44%;
-    margin-top: 1%;
   }
 
   .write {
@@ -445,18 +426,9 @@ export default {
     font-size: 18px;
   }
 
-  .new-post {
+  .allPost {
     width: 550px;
     font-size: 18px;
-  }
-
-  .react-news {
-    width: 550px;
-    font-size: 16px;
-    padding: 0.5rem 0.5rem 0.6rem 0.5rem;
-  }
-  .react-news img {
-    margin-right: -18%;
   }
 }
 
@@ -475,8 +447,6 @@ export default {
 
   .btn-publish {
     font-size: 20px;
-    margin-left: 48%;
-    margin-top: 0.7%;
   }
 
   .write {
@@ -511,22 +481,9 @@ export default {
     margin-top: 3%;
   }
 
-  .new-post {
+  .allPost {
     width: 650px;
     font-size: 20px;
-  }
-
-  .react-news {
-    width: 650px;
-    font-size: 18px;
-    padding: 0.8rem 0.5rem 0.8rem 0.5rem;
-  }
-
-  .react-news p {
-    margin-top: 1.5%;
-  }
-  .react-news img {
-    margin-right: -18%;
   }
 }
 </style>

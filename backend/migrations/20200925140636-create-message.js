@@ -28,9 +28,9 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING
       },
-      likes: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+      comments: {
+        allowNull: true,
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

@@ -67,7 +67,6 @@
 
 <script>
 import axios from "axios";
-// import vuex from "vuex";
 import HeaderPage from "./HeaderPage";
 import FooterPage from "./FooterPage";
 

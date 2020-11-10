@@ -64,10 +64,6 @@ export default {
       email: "",
       password: "",
       urlData: null,
-      // eslint-disable-next-line no-useless-escape
-      regexEmail: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      // eslint-disable-next-line no-useless-escape
-      regexPassword: /^(?=.*d).{4,8}$/,
     };
   },
 
@@ -98,7 +94,6 @@ export default {
       const regexPassword = /^(?=.*\d).{4,8}$/;
 
       let formSubmit = true;
-      // var messageError = "Format saisi invalide !";
 
       if (!regexEmail.test(email)) {
         //SI la valeur de l'adresse email est différente de la regexEmail alors:

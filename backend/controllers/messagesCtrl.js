@@ -1,8 +1,8 @@
 // Imports
 const models = require('../models');
-const asyncLib = require('async');
 const jwtUtils = require('../utils/jwt.utils');
 const multer = require('../middleware/multer-config');
+const fs = require('fs');
 
 // Constants
 const TITLE_LIMIT = 2;
@@ -16,10 +16,11 @@ module.exports = {
     var headerAuth = req.headers['authorization'];
     var userId = jwtUtils.getUserId(headerAuth);
 
-    // Params
+
+       // Params
     var title = req.body.title;
     var content = req.body.content;
-    // var attachment = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    var attachment = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
     if (title == null || content == null) {
       return res.status(400).json({
@@ -41,24 +42,20 @@ module.exports = {
       })
 
       .then(function (user) {
-        console.log(user.id)
         if (user) {
 
           models.Message.create({
               userId: user.id,
               title: title,
               content: content,
-              likes: 0,
-              // attachment: attachment,
+              attachment: attachment,
             })
 
             .then(function () {
-              // console.log(user)
               return res.status(201).json({})
             })
 
             .catch(function (err) {
-              // console.log(err)
               return res.status(500).json({
                 'error': `cannot post message: ${err}`
               });
@@ -91,7 +88,7 @@ module.exports = {
     }
 
     models.Message.findAll({
-      order: [(order != null) ? order.split(':') : ['title', 'ASC']],
+      order: [(order != null) ? order.split(':') : ['updatedAt', 'DESC']],
       attributes: (fields !== '*' && fields != null) ? fields.split(',') : null,
       limit: (!isNaN(limit)) ? limit : null,
       offset: (!isNaN(offset)) ? offset : null,

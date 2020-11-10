@@ -1,14 +1,8 @@
 <template>
-  <!-- <div id="app">
-    <router-view></router-view>
-  </div> -->
 
       <div id="app">
         <div id="nav">
-          <!-- <router-link to="/">HomePage</router-link> | -->
-          
-          <!-- <span v-if="isLoggedIn"> | <a @click="logout">Logout</a></span>
-          <span v-else> | <router-link to="/login">Login</router-link></span> -->
+
         </div>
         <router-view/>
       </div>
@@ -16,11 +10,7 @@
 </template>
 
 <script>
-// import HomePage from './components/HomePage.vue'
 
-// export default {
-//   name: 'App',
-// }
 export default {
       computed: {
         isLoggedIn: function() {

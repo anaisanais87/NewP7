@@ -260,4 +260,16 @@ module.exports = {
                 })
             });
     },
+
+    getSpecificUser: function(req, res) { 
+        const user = req.params.id;
+
+        models.User.findByPk(user)
+
+        .then(function (user) {
+            return res.status(201).json({
+                user
+            });
+        })
+     }
 };

@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.Message.hasMany(models.Comment, { foreignKey: "messageId" });
+
+			models.Message.belongsTo(models.User, {
+        foreignKey: "userId"
+        // {
+				// 	allowNull: false
+				// }
+			});
     }
   };
   Message.init({
@@ -18,18 +26,9 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     content: DataTypes.STRING,
     attachment: DataTypes.STRING,
-    likes: DataTypes.INTEGER
+    comments: DataTypes.STRING
   }, {
-    classMethods: {
-      associate: function(models) {
-        models.Message.belongsTo(models.User, {
-          foreignKey: "userId"
-          // {
-          //   allowNull: false
-          // }
-        })
-      }
-    },
+    
     sequelize,
     modelName: 'Message',
   });
