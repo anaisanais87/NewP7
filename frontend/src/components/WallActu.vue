@@ -45,9 +45,7 @@
                 ref="fileInput"
                 @change="onFileSelected"
               />
-              <button @click="onUpload(title, content)" class="btn-upload-file">
-                Télécharger
-              </button>
+  
             </div>
           </div>
         </div>
@@ -123,13 +121,12 @@ export default {
       this.selectedFile = event.target.files[0];
     },
 
-    onUpload(title, content) {
+    publish(title, content) {
       const formData = new FormData();
       formData.append("image", this.selectedFile);
       formData.append("title", title);
       formData.append("content", content);
 
-      console.log(formData);
       axios
         .post(
           "http://localhost:3000/api/messages/new/",
@@ -139,27 +136,12 @@ export default {
 
         .then((res) => {
           console.log(res);
+          this.allPost();
         });
-    },
-
-    publish: function (title, content, attachment) {
-      axios
-        .post("http://localhost:3000/api/messages/new/", {
-          title: title,
-          content: content,
-          attachment: attachment,
-        })
-        .then((response) => {
-          console.log(response);
-          this.response = response.json;
-        })
-
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    },  
 
     allPost: function () {
+      console.log(axios.defaults.headers.common['Authorization']);
       axios
         .get("http://localhost:3000/api/messages")
 

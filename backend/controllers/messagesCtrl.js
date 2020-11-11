@@ -20,7 +20,9 @@ module.exports = {
        // Params
     var title = req.body.title;
     var content = req.body.content;
-    var attachment = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    var attachment = null;
+    if(req.file !== undefined)
+      attachment = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
 
     if (title == null || content == null) {
       return res.status(400).json({
@@ -78,6 +80,7 @@ module.exports = {
   },
 
   listMessages: function (req, res) {
+    console.log("listMessages")
     var fields = req.query.fields;
     var limit = parseInt(req.query.limit);
     var offset = parseInt(req.query.offset);

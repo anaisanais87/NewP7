@@ -8,7 +8,7 @@ const messagesCtrl = require('../controllers/messagesCtrl');
 
 const multer = require('../middleware/multer-config');
 
-router.post('/new/', multer,messagesCtrl.createMessage);
-router.get('/', multer,messagesCtrl.listMessages);
+router.post('/new/',auth, multer,messagesCtrl.createMessage);
+router.get('/',auth, multer,messagesCtrl.listMessages);
 
 module.exports = router;
